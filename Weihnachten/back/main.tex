@@ -1,0 +1,110 @@
+\documentclass[tikz,11pt]{{standalone}}
+\usepackage{physics}
+\usepackage{calligra}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{quantikz}
+\usepackage{amsfonts}
+
+\usetikzlibrary{%
+  shapes, shadows, patterns, calc,
+  decorations.shapes,
+  decorations.fractals,
+  decorations.markings,
+  decorations.pathmorphing
+}
+
+\colorlet{bodycolor}{black!35!gray!60!brown!98!green}
+\colorlet{bellycolor}{yellow!70!white!92!green}
+
+\tikzset{
+   furspot/.pic = {
+    \path [draw = black, thick, fill] (0,0)    
+    .. controls +(0.3,0)        and  +(0.25,-0.05)   ..  ++(0.35,-.45)
+    .. controls +(-0.45,0.25)   and  +(0.1,0)        ..  ++(-0.85,-0.05)
+    .. controls +(-0.3,0.1)     and  +(-0.4, 0)      ..  cycle;
+   },
+   claw/.pic = {
+    \path [fill = bodycolor!70, draw] (0,0) arc (0:45:0.2 and 0.8)
+                                           arc (135:180:0.2 and 0.8)
+    arc (180:360:0.059) -- cycle;
+   },
+   whiskers/.pic = {
+    \path [fill = bodycolor!70,draw] (0,0) arc (0:45:0.05 and 2.3)
+                                        arc (135:180:0.3 and 2.3)
+    to[out=-90,in=-90] cycle;
+   },
+   snowflake/.pic = {
+   \fill [decoration = Koch snowflake, white] decorate{ decorate{
+          decorate{ (-0.5,-0.3) -- ++(60:1) -- ++(-60:1) -- cycle }}};
+   \foreach \i in {30, 90, 150, 210, 270, 330} {
+        \draw[blue!50!white,very thin] (0,0) -- +(\i:0.3);
+        }
+    \draw[decoration = Koch snowflake, blue!50!white, very thin]
+          decorate{($(0,0)+(60:0.2)$) -- ($(0,0)+(300:0.2)$) --
+                   ($(0,0)+(180:0.2)$) -- cycle};
+   }
+}
+\tikzset{
+  snow/.style   = {decoration = {random steps, segment length = 2mm,
+                   amplitude = 0.4mm}, decorate},
+  plush/.style  = {decoration = {random steps, segment length = 1mm,
+                   amplitude = 0.5mm},decorate}
+}
+
+\begin{document}
+\begin{tikzpicture}[color = bodycolor, draw = black, thick]
+
+%---------------------background and tail----------------------
+% blue sky
+\fill[blue!30!white] (-8cm,-11cm) rectangle (8cm,10cm);
+\node [color = blue!70!white , fill = blue!30!white] at (-4,3.5) {
+$
+    \mbox{SWAP} = \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 0 & 1 
+    \end{pmatrix} = 
+    \begin{quantikz}
+    \qw &\gate[swap ,  fill = blue!30!white]{} & \qw \\
+    \qw &  & \qw
+    \end{quantikz}.
+$};
+
+\node [color = blue!70!white , fill = blue!30!white] at (2.7,.7) {\Large{$U_k = \begin{pmatrix} e^{2\pi 2^{-k}} & 0 \\ 0 & e^{-2\pi 2^{-k}}\end{pmatrix}$}};
+\node [color = blue!70!white , fill = blue!30!white] at (-2.3,-2) {\Huge{$A = \int d\Theta dr r^2 \sin(\theta)$}};
+\node [color = blue!70!white , fill = blue!30!white] at (1.4,-4.7) {\Large{$\mathcal{L}G\left(\mathbf{x},\mathbf{\xi}\right) + \delta\left(\mathbf{x} - \mathbf{\xi}\right) = 0\;\;\; \mathbf{x},\mathbf{\xi} \in \mathbb{R}^n$}};
+\node [color = blue!70!white , fill = blue!30!white] at (0,-7.7) {$    R_k = 
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & e^{2\pi i2^{-k}}
+    \end{pmatrix}
+    \rightarrow
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & e^{2\pi i(2^{-k}+\phi)}
+    \end{pmatrix} = 
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & e^{2\pi i2^{-k}}
+    \end{pmatrix} \cdot
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & e^{2\pi i\phi}
+    \end{pmatrix} =R_k R_\phi = R_\phi R_k $};
+
+
+
+% random snowflakes
+\foreach \i in {0.1,0.11,...,1}{
+  \pic [scale = \i, opacity = 0.9] at (rand*7.5, rnd*18-10.5) {snowflake};}
+% more tiny snowflakes
+\foreach \i in {0.1,0.11,...,0.5}{
+  \pic [scale = \i, opacity = 0.9] at (rand*7.5, rnd*18-10.5) {snowflake};}
+
+\node [cloud,aspect = 6.5, cloud puff arc = 120, cloud puffs = 12.9, fill = white,
+       color = white] at (0,7) {\Huge M \hspace{9.8cm}.};
+
+\end{tikzpicture}
+\end{document}
